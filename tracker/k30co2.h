@@ -9,7 +9,7 @@
 #include <fcntl.h>			//Used for UART
 #include <termios.h>		//Used for UART
 
-int k30_filestream = -1
+int k30_filestream = -1;
 
 #define K30_PORT "/dev/ttyS0"
 #define K30_BAUD_RATE_MODE B9600

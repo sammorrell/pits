@@ -16,11 +16,11 @@ int connect_k30(void)
         tcgetattr(k30_filestream, &options);
         options.c_cflag = K30_BAUD_RATE_MODE | CS8 | CLOCAL | CREAD;		// Set baud rate
         options.c_iflag = IGNPAR;
-	    options.c_oflag = 0;
-	    options.c_lflag = 0;
+	options.c_oflag = 0;
+	options.c_lflag = 0;
         tcflush(k30_filestream, TCIFLUSH);
-        tcsetattr(uart0_filestream, TCSANOW, &options);
-        print("Connected to CO2 sensor on %s \n", K30_PORT)
+        tcsetattr(k30_filestream, TCSANOW, &options);
+        printf("Connected to CO2 sensor on %s \n", K30_PORT);
         sleep( 1000 ); // Sleep for 1 second
     }
 
@@ -35,7 +35,7 @@ void request_co2_reading()
     int count;
 
     p_tx_buff = &tx_buff[0];
-    fprintf( p_tx_buff, "\xFE\x44\x00\x08\x02\x9F\x25" );
+    fprintf( tx_buff, "\xFE\x44\x00\x08\x02\x9F\x25" );
 
     if ( k30_filestream != -1 )
     {
@@ -62,7 +62,7 @@ int get_co2_reading()
 
     // Now read the bytes from the sensor
     rx_length = read( k30_filestream, (void*) rx_buff, K30_RX_LENGTH );
-    rx_buff[rx_length] = '\0'; // Terminate buffer with a null char
+    rx_buff[rx_length] = "\0"; // Terminate buffer with a null char
 
     if ( rx_length == 0 )
     {
@@ -73,5 +73,5 @@ int get_co2_reading()
         co2 = ( high * 256 ) + low;
     }
 
-    return c02;
+    return co2;
 }
