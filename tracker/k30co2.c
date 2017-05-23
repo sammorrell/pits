@@ -27,6 +27,7 @@ int connect_k30(void)
     return status;
 }
 
+// Sends the TX bytes required to read out the CO2 reading.
 void request_co2_reading()
 {
     unsigned char tx_buff[7];
@@ -48,6 +49,7 @@ void request_co2_reading()
     }
 }
 
+// Returns an integer containing the CO2 reading.
 int get_co2_reading()
 {
     int co2 = 0;
@@ -60,6 +62,7 @@ int get_co2_reading()
 
     // Now read the bytes from the sensor
     rx_length = read( k30_filestream, (void*) rx_buff, K30_RX_LENGTH );
+    rx_buff[rx_length] = '\0'; // Terminate buffer with a null char
 
     if ( rx_length == 0 )
     {
